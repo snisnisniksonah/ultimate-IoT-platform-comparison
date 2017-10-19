@@ -71,11 +71,13 @@ build_master () {
   git checkout -f master README.md
 
 # add index.md
-  cp README.md index.md
+  tail -n +2 README.md > index.md
 
 # add docs to index.md
   echo "# Docs" >> index.md
-  find docs -type f -exec sh -c 'f=$(basename $1 .ts);d=$(dirname $1);echo "- [$f]($d/$f)"' sh {} >> index.md \;
+  echo "- [Travis_Build_Deploy](docs/Travis_Build_Deploy.md)" >> index.md
+  echo "- [Update_YOUR_Comparison.md](docs/Update_YOUR_Comparison.md)" >> index.md
+  echo "- [ADR Index](docs/adr) >> index.md
 
 # insert linebreak in index.md
   echo "" >> index.md
@@ -84,6 +86,11 @@ build_master () {
   git checkout -f gh-pages prs
   echo "# PRs" >> index.md
   find prs -mindepth 1 -maxdepth 1 -type d -exec sh -c 'f=$(basename $1 .ts);d=$(dirname $1);echo "- [$f]($d/$f)"' sh {} >> index.md \;
+
+# add link to current demo to index.md
+  echo "" >> index.md
+  echo "# Current Master" >> index.md
+  echo "- [Demo](https://ultimate-comparisons.github.io/ultimate-comparison-BASE/demo/)" >> index.md
 
 # add index.md to gh-pages
   git add index.md
